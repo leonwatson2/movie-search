@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/debounceTime';
 
 import { Movie } from './movie'
 
@@ -14,11 +15,10 @@ export class MovieService {
   private apiKey:string = "0ae57aa38ff0e4c5116feb88b8f6ee81"
   private imageBaseUrl:string = ""
   private selectedMovie = new Subject<Movie>()
+  private imageSizes:{backdrop?:string[], poster?:string[]} = {}
   
   constructor(private http:Http) { 
-    this.getConfiguration().subscribe(c=>{
-      console.log(c)
-    })
+    this.setImageConfiguration()
   }
   
   get currentMovie(){
@@ -34,13 +34,35 @@ export class MovieService {
     return this.http.get(`${this.baseApiUrl}`, { search })
                     .map(res => res.json().results)
   }
-
-  getConfiguration(){
+ 
+  setImageConfiguration(){
     
     const search = this.paramsWithApiKey()
 
-    return this.http.get(`${this.configurationUrl}`, { search })
+    this.http.get(`${this.configurationUrl}`, { search })
                     .map(res=>res.json())
+                    .subscribe(config=>{
+                      this.imageBaseUrl = config.images.base_url
+                      this.imageSizes = {
+                        backdrop:config.images.backdrop_sizes,
+                        poster:config.images.poster_sizes
+                      }
+                    })
+  }
+
+  createBackdropUrl(backdropPath:string, size:string = ""){
+    if(!backdropPath){
+      return ""
+    }
+    return `${this.imageBaseUrl}${this.imageSizes.backdrop[0]}${backdropPath}`
+  }
+
+  createPosterUrl(posterPath:string, size:string = ""){
+    if(!posterPath){
+      return ""
+    }
+    return `${this.imageBaseUrl}${this.imageSizes.poster[this.imageSizes.poster.length - 1]}${posterPath}`
+
   }
 
   paramsWithApiKey(otherParams:Object = {}){

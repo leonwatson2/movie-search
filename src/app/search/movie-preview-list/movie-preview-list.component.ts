@@ -9,10 +9,14 @@ import { Movie } from '../../movie'
 })
 export class MoviePreviewListComponent implements OnInit {
   @Input() movies:Movie[] 
+  @Input() query:string = ""
+  @Input() fetching:boolean = false
   @Output() movieSelected = new EventEmitter<Movie>()
+  
   constructor(private movieService:MovieService) {  }
 
   ngOnInit() {
+    console.log(this.query)
   }
 
   handleClick(movie:Movie){

@@ -1,3 +1,5 @@
-<input type="text" [(ngModel)]="search" (input)="searchSubject.next(search)">
-<movie-preview-list [movies]="searchResults"></movie-preview-list>
+<div class="col s12">
+    <input class="search-input" type="text" [(ngModel)]="search" (input)="searchObserver.next(search)" placeholder="Search A Movie">
+    <movie-preview-list [movies]="searchResults" [query]="search" [fetching]="fetching"></movie-preview-list>
+</div>
 

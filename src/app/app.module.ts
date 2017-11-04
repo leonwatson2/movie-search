@@ -7,14 +7,18 @@ import { SearchComponent } from './search/search.component';
 import { MoviePreviewComponent } from './search/movie-preview/movie-preview.component';
 import { MoviePreviewListComponent } from './search/movie-preview-list/movie-preview-list.component';
 
-import { MovieService } from './movie.service'
+import { MovieService } from './movie.service';
+import { FooterComponent } from './footer.component';
+import { DisplayMovieComponent } from './display-movie.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
     MoviePreviewComponent,
-    MoviePreviewListComponent
+    MoviePreviewListComponent,
+    FooterComponent,
+    DisplayMovieComponent
   ],
   imports: [
     BrowserModule,

@@ -20,4 +20,5 @@ export class AppComponent {
   startNewSearch(){
     this.movieService.changeSelectedMovie(null)
   }
+
 }
