@@ -7,12 +7,11 @@ Then if we want to search something new we just click this little search button 
 Now, the first thing we have to do when creating our app in React is plan how we would break down our app into components. 
 Let's go ahead and break this down into components.  Top to bottom
 
-We got a little search button that could be it's own thing for like a header but since it's just one thing 
-we'll keep it in the main app template.
+We got a little search button that could be it's own thing for like a header which could be a component by it self
 
 Then we have a search input that shows movies when typed in. So that all by it self can be a component. 
-Then we have these cards displaying the search results title and backgrounds could be a component in itself inside of that
-and those could all in a component that holds the list.
+Then we have these cards displaying the search results title and backgrounds could be a component.
+
 
 Then when we click on one of the these cards the search and search-results go away 
 and the movie details show up. So this would be a completely seperate component from the search.
@@ -57,10 +56,10 @@ So now we're going to create the structure of what we'd like to see using compon
     using the angular-cli again
     ng g c search --inline-style true --spec false --prefix false
     Let's go ahead and put the input in this one.
-6.Then remeber there's a lot of cards that show up that are the movie preview 
-    cards let's call them just that,
+6.Then remeber there's a lot of cards that show up that are like the preview of the movie 
+    let's call them movie-preview,
     and use the anuglar cli to put them in the search foler by typing
-    ng g c search/movie-preview --inline-style true --spec false --prefix false --flat true
+    ng g c search/moviePreview --inline-style true --spec false --prefix false --flat true
 
     then let's go ahead and put some filler text and use that component a few times in our 
     search component
@@ -73,4 +72,88 @@ So now we're going to create the structure of what we'd like to see using compon
 
     Then we're done. Up next we'll go about styling each component with built&custom in classes
 
-D.
+D.HTML/CSS creation
+    1.So now we're going to setup just how each of these components looks. No functionality yet 
+    just adding the necessary elements and classes to make it look more like the finished product.
+    2.Let's first start with the app component 
+        <main>
+        <div class="container">
+            <search-movie class="row" ></search-movie>
+            <display-movie class="row"></display-movie>
+        </div>
+        </main>  
+    3. Now let's do the header
+    <header>
+        <div class="row">
+            <div class="col s4 offset-s4 search-btn center-align">
+                <span class="material-icons">search</span>
+            </div>
+        </div>
+    </header>
+    4. Next up let's do the footer 
+        <footer class="page-footer">
+            <div class="container">
+                    <div class="row">
+                        <div class="col l6 s12">
+                                <h5 class="white-text">Database provided by 
+                                <a href="https://www.themoviedb.org/">The Movie DB</a>
+                                </h5>
+                                <p class="grey-text text-lighten-4"></p>
+                        </div>
+                    </div>
+            </div>
+            <div class="footer-copyright">
+                    <div class="container">
+                        Designed and Developed by: Leon Watson
+                    </div> 
+            </div>
+        </footer>
+    5. Now it's time for the search component
+        <div class="col s12">
+            <input 
+                class="search-input" 
+                type="text" 
+                placeholder="Search A Movie"
+                [(ngModel)]="search" 
+                (input)="searchObserver.next(search)" 
+                >
+            <div class="row">
+                <movie-preview></movie-preview>
+                <movie-preview></movie-preview>
+                <movie-preview></movie-preview>
+                <movie-preview></movie-preview>
+                <movie-preview></movie-preview>
+                <h3 [ngStyle]="{'text-align':center}">
+                    No results found for {{search}} 
+                </h3>
+            </div>
+        </div>
+    6. Now let's get the movie preview component all setup
+    <div class="col s12 m4" [ngClass]="['movie']">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">{{ movie.title }}</span>
+          <p>{{ movie.homepage }}</p>
+          <div class="movie-year">{{ movie.release_date }}</div>
+        </div>
+      </div>
+    </div>
+    7. Last but not least the display movie component where we display the movies
+        title, year, synapses and the img on the right
+    <div class="col m7 s12">
+        <h3 class="fade-in-right">{{ movie.title }}</h3>
+        <div class="row">
+        <div class="tagline col m3 fade-in-right slower">{{ movie.release_date }}</div>
+        </div>
+        <div class="row">
+        <p class="flow-text col s12 fade-in-left slow">{{ movie.overview }}</p>
+        </div>
+    </div>
+    <div class="col m5">
+        <img class="movie-poster fade-in-left" 
+            src="http://image.tmdb.org/t/p/original/rhIRbceoE9lR4veEXuwCC2wARtG.jpg" 
+            alt=""
+        >
+    </div>
+
+    
