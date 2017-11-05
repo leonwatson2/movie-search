@@ -33,4 +33,44 @@ Files: style.css, animations.css
 
 C.Creating the component structure
 So now we're going to create the structure of what we'd like to see using components it's time to create.
-1. 
+1. First I'd like you to take the challenge and create the structure of the app. 
+    I don't mean creating exactly how it looks but just the components with some dummy text.
+    So the search component just says search component or movie card says movie card so you can get use to 
+    creating your components. Maybe nest components inside folders according to where the component will go in the app.
+    Also, try to create them by hand and then also using the angular-cli.
+    This'll help you get a grasp on creating an angular application.
+    So go ahead, pause, the video and create those components and then we'll do it together.
+2. So how do you think you did? Does the structure make since to you, if you came back to it a month 
+    from now would you be able to jump back in and modify something?
+3.Awesome, so let's go ahead and do it together. First let's go ahead and make this top header with the search button
+    We'll go ahead and just make this a component with a inline-template
+    called HeaderComponent. and for right now were just going to put in some filler text.
+
+4.Now let's do the movie details we have here (show details component) with the poster
+    image on the side. Let's call that display-movie component and use the angular cli
+    to make the external template and the component file by typing in the terminal
+    ng g c displayMovie --inline-style true --flat true --spec false --prefix false
+    and then just put some filler text in there. "Movie Details"
+
+5.Then let's go ahead and create the search component. 
+    And since this one has other components. We'll go ahead and make a folder with this one.
+    using the angular-cli again
+    ng g c search --inline-style true --spec false --prefix false
+    Let's go ahead and put the input in this one.
+6.Then remeber there's a lot of cards that show up that are the movie preview 
+    cards let's call them just that,
+    and use the anuglar cli to put them in the search foler by typing
+    ng g c search/movie-preview --inline-style true --spec false --prefix false --flat true
+
+    then let's go ahead and put some filler text and use that component a few times in our 
+    search component
+
+7.Last but not least let's make the footer component add call it footer and this time get the prefix
+    that the cli gives us so that command would be
+    ng g c footer --inline-style true --spec false --flat true
+    And let's go ahead and put some filler text in there that just says "Footer" inside of a div
+    Then put that in our app.component.html file
+
+    Then we're done. Up next we'll go about styling each component with built&custom in classes
+
+D.
