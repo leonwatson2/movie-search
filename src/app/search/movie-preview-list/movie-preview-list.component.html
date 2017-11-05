@@ -1,4 +1,0 @@
-<div class="row">
-    <movie-preview *ngFor="let movie of movies; let i = index" [movie]="movie" (click)="handleClick(movie)" [index]="i"></movie-preview>
-    <h3 *ngIf="movies.length === 0 && query.length > 0 && !fetching" [ngStyle]="{'text-align':center}">No results found for {{query}} </h3>
-</div>
