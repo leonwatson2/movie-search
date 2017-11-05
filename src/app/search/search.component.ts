@@ -44,5 +44,9 @@ export class SearchComponent implements OnInit {
                       })
     }
   }
+
+  handleClick(movie:Movie){
+    this.movieService.changeSelectedMovie(movie)
+  }
  
 }

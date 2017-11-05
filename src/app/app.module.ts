@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms'
 import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
 import { MoviePreviewComponent } from './search/movie-preview/movie-preview.component';
-import { MoviePreviewListComponent } from './search/movie-preview-list/movie-preview-list.component';
 
 import { MovieService } from './movie.service';
 import { FooterComponent } from './footer.component';
@@ -17,7 +16,6 @@ import { HeaderComponent } from './header.component'
     AppComponent,
     SearchComponent,
     MoviePreviewComponent,
-    MoviePreviewListComponent,
     FooterComponent,
     DisplayMovieComponent,
     HeaderComponent
