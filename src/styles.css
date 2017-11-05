@@ -1,7 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 html, body{
     color:rgb(233, 230, 233);
-    background:#010;
+    background: linear-gradient(#000 10%, #333 20%, #000 30%);
+    background-size: 100% 50px;
 }
 app-root {
     display: flex;
@@ -31,5 +32,5 @@ main {
 }
 
 .page-footer{
-    background-color: gray;
+    background-color: #333;
 }
