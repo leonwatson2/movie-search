@@ -1,12 +1,6 @@
 <!--The whole content below can be removed with the new code.-->
 
-<header>
-  <div class="row">
-    <div *ngIf="currentMovie" class="col s4 offset-s4 search-btn center-align" (click)="startNewSearch()">
-      <span class="material-icons">search</span>
-    </div>
-  </div>
-</header>
+<app-header *ngIf="currentMovie" ></app-header>
 <main>
   <div class="container">
     <search-movie class="row" *ngIf="!currentMovie"></search-movie>

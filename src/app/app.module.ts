@@ -10,6 +10,7 @@ import { MoviePreviewListComponent } from './search/movie-preview-list/movie-pre
 import { MovieService } from './movie.service';
 import { FooterComponent } from './footer.component';
 import { DisplayMovieComponent } from './display-movie.component'
+import { HeaderComponent } from './header.component'
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { DisplayMovieComponent } from './display-movie.component'
     MoviePreviewComponent,
     MoviePreviewListComponent,
     FooterComponent,
-    DisplayMovieComponent
+    DisplayMovieComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
