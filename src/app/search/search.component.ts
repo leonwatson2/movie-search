@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import { MovieService } from '../movie.service'
 import { Movie } from '../movie'
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
+import { data } from './mock-data'
 
 @Component({
   selector: 'search-movie',
@@ -11,23 +11,17 @@ import 'rxjs/add/operator/debounceTime';
   styleUrls: ['./search.component.css'],
 })
 export class SearchComponent implements OnInit {
-  private searchObs:Observable<string>
-  private searchObserver:Observer<string>
+  private search$:Subject<string> = new Subject<string>()
   private searchResults:Movie[] = []
-  private search:string = ""
   private fetching:boolean = false;
+  private search:string = ""
   constructor(private movieService:MovieService) {  }
 
-  ngOnInit() {
-    this.searchObs = Observable.create((observer)=>{
-                        this.searchObserver = observer
-                      })
-                      .map(val=>{
-                        this.fetching = true
-                        return val
-                      })
-                      .debounceTime(500)
-                      .subscribe(this.handleChange.bind(this))
+  ngOnInit(){
+
+    this.search$.map((query)=> {this.fetching = true; return query})
+                  .debounceTime(500)
+                  .subscribe(this.handleChange.bind(this))
   }
  
   handleChange(val:string){
@@ -35,7 +29,6 @@ export class SearchComponent implements OnInit {
       this.searchResults = []
       this.fetching = false      
     }else{
-      
       this.movieService.searchMovie(val)
                       .subscribe((searchResults:Movie[]) => { 
                         this.fetching = false
