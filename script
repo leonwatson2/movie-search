@@ -46,7 +46,7 @@ So now we're going to create the structure of what we'd like to see using compon
     called HeaderComponent. and for right now were just going to put in some filler text.
 
 4.Now let's do the movie details we have here (show details component) with the poster
-    image on the side. Let's call that display-movie component and use the angular cli
+    image on the right side. Let's call that component display-movie and use the angular cli
     to make the external template and the component file by typing in the terminal
     ng g c displayMovie --inline-style true --flat true --spec false --prefix false
     and then just put some filler text in there. "Movie Details"
@@ -72,7 +72,7 @@ So now we're going to create the structure of what we'd like to see using compon
 
     Then we're done. Up next we'll go about styling each component with built&custom in classes
 
-D.HTML/CSS creation
+D.Creating the HTML/CSS for our components
     1.So now we're going to setup just how each of these components looks. No functionality yet 
     just adding the necessary elements and classes to make it look more like the finished product.
     2.Let's first start with the app component 
@@ -115,7 +115,6 @@ D.HTML/CSS creation
                 type="text" 
                 placeholder="Search A Movie"
                 [(ngModel)]="search" 
-                (input)="searchObserver.next(search)" 
                 >
             <div class="row">
                 <movie-preview></movie-preview>
@@ -132,21 +131,20 @@ D.HTML/CSS creation
     <div class="col s12 m4" [ngClass]="['movie']">
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
-          <span class="card-title">{{ movie.title }}</span>
-          <p>{{ movie.homepage }}</p>
-          <div class="movie-year">{{ movie.release_date }}</div>
+          <span class="card-title">The Movie Title</span>
+          <div class="movie-year">2017-8-10</div>
         </div>
       </div>
     </div>
     7. Last but not least the display movie component where we display the movies
         title, year, synapses and the img on the right
     <div class="col m7 s12">
-        <h3 class="fade-in-right">{{ movie.title }}</h3>
+        <h3 class="fade-in-right">The Movie Title</h3>
         <div class="row">
-        <div class="tagline col m3 fade-in-right slower">{{ movie.release_date }}</div>
+        <div class="tagline col m3 fade-in-right slower">2017-8-10</div>
         </div>
         <div class="row">
-        <p class="flow-text col s12 fade-in-left slow">{{ movie.overview }}</p>
+        <p class="flow-text col s12 fade-in-left slow">A cool insightful overview about this movie that makes you want to watch it.</p>
         </div>
     </div>
     <div class="col m5">
@@ -155,5 +153,89 @@ D.HTML/CSS creation
             alt=""
         >
     </div>
+E. The Movie Interface
+    So we're going to be working with the movie DB database. You can find the API here at
+    https://developers.themoviedb.org/3/
+    and we're going to go down here to see how we can search for movies using this API.
+    So you'll see that we need to have an API key and query params for when we call this api.
+    But what we're looking for is the object that is passed from it. Which is here under responses.
+    And we're going to only use some of this information like the 
+    export interface Movie {
+        backdrop_path?:string|null
+        poster_path?:string|null
+        genres?:Object[]
+        original_title?:string
+        overview?:string
+        title?:string
+        tagline?:string|null
+        release_date?:string
+    }
+    So we're going to go ahead and make an interface that has all these properties called Movie.
+    This is going to tell Angular and Typescript what type of object we expect for our variables.
+    So now we can use that every where we need it in the application for clarification.
+
+
+F. Setting Up the Input and Outputs
+    1.Now we're going to setup our input and outputs for our components.
+    2.But first we're going to get some mock data, so we have something to work with. 
+    You'll find in the course files a file called mock-data.ts that looks something like this.
+     We're going to put that right here in the src folder to access. through out our app and delete it
+     when we connect to the The Movie API.
+    The data we'll be getting back from the API 
+    are the search results with all the Movies according to a certain query,
+    the baseURL of where to get the posters and background you saw in the application,
+    and the different sizes of the pictures.
+
+    2. Now let's use that mock data to start putting together our functionality
+    3. Let's start in the search.component.ts 
+        where we'll import that the searchResults as data at the top.
+    4. Then we'll create a variable called searchResults in our SearchComponent 
+        class that'll be an Array of Movies and we'll import that interface so Typescript 
+        knows what that type is.
+    5. We'll initialize that to the data we're getting from the mock-data
+    6. Now we're going to go to the template file for the search component
+        and we're going to *ngFor="let movies of searchResults; let i = index;"
+        directive and loop through our searchResults on the movie-preview component
+    7. And pass each search result in as a property called movie that we'll create next
+    8. So now go to the movie-preview component ts file
+    9. and we're going to import Input from angular core so we can put an input on out 
+        movie-preview component
+    10. We're also going to import that movie interface we created
+    11. Then we're going to call this input movie with a type of Movie
+    12. Now let's go to out movie-preview template and print out the movie.title 
+        and the movie.release_date
+    //
+    13. Next we're going to have an out event for when a movie-preview
+        card is clicked. For right now we'll just create a function to handle the click
+        and console.log(movie) that movie that send to that function. 
+    14. Last Input that we'll need to do is in the app.component so 
+        let's open the app.component.ts.
+    15. We're going to import that Movie interface we made 
+        then create a variable inside the component called currentMovie with the type
+        Movie.
+    16. Then we'll go to the template file and send that currentMovie variable to the 
+        display-movie component as a property called movie
+    17. Now let's go to the display movie component and import Input from angular core
+        and the Movie interface 
+    18. Then down in the component let's create that input variable and call it movie
+    19. Now inside the template and let's go ahead and use that movie variable 
+        for the: 
+        1. movie.title
+        2. movie.release_date 
+        3. movie.overview
+        4. movie.title for alt
+        5. create a function called getFullPosterUrl(movie.poster_path)
+    20. The reason we have to make this function is because the api only sends a relative
+        URL and we'll get the base url from it using a complete different request
+    21. for right now we'll return the poster from the Avengers movie
+        http://cdn.collider.com/wp-content/uploads/the-avengers-robert-downey-jr-iron-man-poster.jpg
+    22. So there we go, we setup the inputs and outputs for our application!
+
+G. 
+
+
+
+
+
 
     
