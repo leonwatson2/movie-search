@@ -259,28 +259,24 @@ G. The Movie Service and the Current Movie
     //movie.service.ts
     3. We're going to import Observable and Observer from 
     import { Observable } from 'rxjs/Observable';
-    import { Observer } from 'rxjs/Observer';
+    import { Subject } from 'rxjs/Subject';
         because we are going to create an Obeservable for the currentMovie 
-        that is the selected in the application and going to need an Observer to 
-        observer that Observable. 
+        that is the selected in the application and going to need an Subject to 
+        allows us to call the next function on our Observable. 
         This would be a good time to use a library like flux or redux but since this application
         is so small having it done in a service would be the quickest and easiest way using what
         we've learned so far.
         and let's also import that Movie interface we made. 
-    So now we'll give the service a private variable called 
-        private selectedMovie:Observable<Movie>
-        private movieObserver:Observer<Movie>
-    and now in the constructor of our service we'll initialize that Observable
-    and set the value of the observer as well.
-        constructor() { 
-            this.selectedMovie = Observable.create((observer:Observer<Movie>)=>{
-                this.movieObserver = observer
-            })
-        } 
-    then well also make a get variable call currentMovie that'll return 
+    4.So now we'll give the service a private variable called 
+        private selectedMovie:Subject<Movie> = new Subject<Movie>()
+
+    5.then well also make a get variable call currentMovie that'll return 
     our selectedMovie variable so we can access to that Observable to subscribe to.
 
-    last thing we need to do is create a function that will call that next function on our observer
+        get currentMovie(){
+            return this.selectedMovie
+        }
+    6.last thing we need to do is create a function that will call that next function on our observer
     when the currentMovie is changed.
 
     changeSelectedMovie(movie:Movie){
@@ -290,12 +286,12 @@ G. The Movie Service and the Current Movie
     Great so now we can go ahead and use this to set the currentMovie and get the current movie 
     in other components
 H. Getting the CurrentMovie from the service.
-    Alright so we've create this movie service and provided to our application.
+    We've created the movie service and provided it to our application.
     So now all we need to do is inject it into the components that need it and use 
     the properties and functions.
 
     //app.component.ts
-    1.In here we'll first import the movie service
+    1. In here we'll first import the movie service
     2. Then we'll inject it inside our component
     3. Then also in the constructor we'll subscribe to the currentMovie observable
     constructor(private movieService:MovieService){
@@ -305,22 +301,65 @@ H. Getting the CurrentMovie from the service.
             this.currentMovie = movie
         })
     }
-    so now whenever that next function is called on the observer in the service the 
+    so now whenever that next function is called on the subject in the service the 
     movie will be passed to this function and set our currentMovie variable.
+    
     //app.component.html
     4.Now in our app.component.html file we'll go ahead and use the *ngif attribute directive 
     to only show the display-movie component when there is a movie and the search component 
     when there isn't 
+
     //search.component.ts
     5.This is where we have a click function that changes the current movie so
-    we're going go ahead and connect it to the movie service.
+    we're going go ahead and connect it to the movie service by changing the console.log()
+    in the setCurrentMovie function to use the movieService function we created
+
+    setCurrentMovie(movie:Movie){
+        this.movieService.changeSelectedMovie(movie)
+    }
+
     6.So let's import the movie service
     7.and inject into our component in the constructor
     8. now in the setCurrentMovie function let's get rid of the console.log and 
         use the movie to set the currentMovie 
     9. And there we go we've connected the movieService to components to share data across them.
+I.Faking the search with observables
+    //search.component.ts
+    1. So now we need to setup up the searching is our search.component.ts file
+    2. What we want is to send a search query after the user types into the input.
+    3. This can be done using that subject Obeservable like we did in the movie.service 
+        to send searches after an input change.
+    4. First we'll need to import Subject
+    import { Subject } from 'rxjs/Subject';
+    5. Then down in the SearchComponent class we'll create a variable
+    private search$:Subject<string> = new Subject<string>()
+    and if remeber that all the dollar sign means at the end of the variable name is that
+    is a type of observable.
 
+    6.We're also going to make a boolean variable called fetching that will use to hold the 
+    state of fetching searchResults or not.
+    fetching:boolean = false
+
+    7.Now in this ngOnInit method which is a method that is called when the component is 
+    about to be put on the page.
+    We're going to go ahead and subscribe to that search observable.
     
+    this.search$.map((query)=> {this.fetching = true; return query})
+                  .subscribe(this.handleChange.bind(this))
+    8.but first we're going to map through each value given to it, 
+    set the fetching to true, and then send that value to the subscriber
+    9.then this is where we would connect to the database but we're going do that in the 
+    movieService so for now let's just console.log out the value.
+    10.Now if we test this you'll see that we are search on every key stroke but we don't want to 
+    send request to the server every key stroke. So we're going to use a function built on top
+    of observables that allows us to debounce or wait until things stop changing before sending
+    and that method is called debounceTime.
+    11. All we need to do is import it at the top from rxjs
+    import 'rxjs/add/operator/debounceTime'; 
+    12. And then add it before our call to subscribe and give it a value we want to debounce by
+        so let's say 500
+    .debounceTime(500)
+    13. And now you'll see that it only happens after I stop typing for about a half second
 
 
     
