@@ -187,37 +187,44 @@ F. Setting Up the Input and Outputs
     and the different sizes of the pictures.
 
     2. Now let's use that mock data to start putting together our functionality
+    //search.component.ts
     3. Let's start in the search.component.ts 
         where we'll import that the searchResults as data at the top.
     4. Then we'll create a variable called searchResults in our SearchComponent 
         class that'll be an Array of Movies and we'll import that interface so Typescript 
         knows what that type is.
     5. We'll initialize that to the data we're getting from the mock-data
+    //search.component.html
     6. Now we're going to go to the template file for the search component
         and we're going to *ngFor="let movies of searchResults; let i = index;"
         directive and loop through our searchResults on the movie-preview component
     7. And pass each search result in as a property called movie that we'll create next
+    //movie-preview.component.ts
     8. So now go to the movie-preview component ts file
     9. and we're going to import Input from angular core so we can put an input on out 
         movie-preview component
     10. We're also going to import that movie interface we created
     11. Then we're going to call this input movie with a type of Movie
-    12. Now let's go to out movie-preview template and print out the movie.title 
-        and the movie.release_date
-    //
-    13. Next we're going to have an out event for when a movie-preview
-        card is clicked. For right now we'll just create a function to handle the click
-        and console.log(movie) that movie that send to that function. 
-    14. Last Input that we'll need to do is in the app.component so 
+    // movie-preview.component.html
+    12. Now let's go to out movie-preview template 
+    13. print out the movie.title and the movie.release_date 
+    14. Last Input that we'll need to do is in the app component so 
         let's open the app.component.ts.
+    //app.component.ts
     15. We're going to import that Movie interface we made 
         then create a variable inside the component called currentMovie with the type
-        Movie.
+        Movie and initialize it to be null
+    //app.component.html
     16. Then we'll go to the template file and send that currentMovie variable to the 
         display-movie component as a property called movie
+    16.5. and we're going to have an event for when a movie-preview
+        card is clicked. For right now we'll just create a function to handle the click
+        called setCurrentMovie and console.log(movie) that movie that send to that function.
+    //display-movie.component.ts
     17. Now let's go to the display movie component and import Input from angular core
         and the Movie interface 
     18. Then down in the component let's create that input variable and call it movie
+    //display-movie.component.html
     19. Now inside the template and let's go ahead and use that movie variable 
         for the: 
         1. movie.title
@@ -227,15 +234,88 @@ F. Setting Up the Input and Outputs
         5. create a function called getFullPosterUrl(movie.poster_path)
     20. The reason we have to make this function is because the api only sends a relative
         URL and we'll get the base url from it using a complete different request
+    //display-movie.component.ts
     21. for right now we'll return the poster from the Avengers movie
         http://cdn.collider.com/wp-content/uploads/the-avengers-robert-downey-jr-iron-man-poster.jpg
+    
     22. So there we go, we setup the inputs and outputs for our application!
 
-G. 
+G. The Movie Service and the Current Movie
+    1.At the moment we have the current movie variable but it's just an empty object 
+        and doesn't change when we click on the movie-preview cards. Now we could setup 
+        an event chain from the search component to the app component to get the selected movie
+        but instead we're going to use a service to hold that data instead of making the app.component
+        reliant on that event to get the currentMovie.
 
+    2. So let's go ahead and make our service using the cli using this command
+        ng g service movieService --spec false --module app.module.ts
+        This will create a service called MovieService and provide it in our app.module so
+        we can inject it anywhere in our application
+    //movie.service.ts
+    3. We're going to import Observable and Observer from 
+    import { Observable } from 'rxjs/Observable';
+    import { Observer } from 'rxjs/Observer';
+        because we are going to create an Obeservable for the currentMovie 
+        that is the selected in the application and going to need an Observer to 
+        observer that Observable. 
+        This would be a good time to use a library like flux or redux but since this application
+        is so small having it done in a service would be the quickest and easiest way using what
+        we've learned so far.
+        and let's also import that Movie interface we made. 
+    So now we'll give the service a private variable called 
+        private selectedMovie:Observable<Movie>
+        private movieObserver:Observer<Movie>
+    and now in the constructor of our service we'll initialize that Observable
+    and set the value of the observer as well.
+        constructor() { 
+            this.selectedMovie = Observable.create((observer:Observer<Movie>)=>{
+                this.movieObserver = observer
+            })
+        } 
+    then well also make a get variable call currentMovie that'll return 
+    our selectedMovie variable so we can access to that Observable to subscribe to.
 
+    last thing we need to do is create a function that will call that next function on our observer
+    when the currentMovie is changed.
 
+    changeSelectedMovie(movie:Movie){
+        this.movieObserver.next(movie)
+    }
 
+    Great so now we can go ahead and use this to set the currentMovie and get the current movie 
+    in other components
+H. Getting the CurrentMovie from the service.
+    Alright so we've create this movie service and provided to our application.
+    So now all we need to do is inject it into the components that need it and use 
+    the properties and functions.
+
+    //app.component.ts
+    1.In here we'll first import the movie service
+    2. Then we'll inject it inside our component
+    3. Then also in the constructor we'll subscribe to the currentMovie observable
+    constructor(private movieService:MovieService){
+        movieService
+        .currentMovie
+        .subscribe(movie => {
+            this.currentMovie = movie
+        })
+    }
+    so now whenever that next function is called on the observer in the service the 
+    movie will be passed to this function and set our currentMovie variable.
+    //app.component.html
+    4.Now in our app.component.html file we'll go ahead and use the *ngif attribute directive 
+    to only show the display-movie component when there is a movie and the search component 
+    when there isn't 
+    //search.component.ts
+    5.This is where we have a click function that changes the current movie so
+    we're going go ahead and connect it to the movie service.
+    6.So let's import the movie service
+    7.and inject into our component in the constructor
+    8. now in the setCurrentMovie function let's get rid of the console.log and 
+        use the movie to set the currentMovie 
+    9. And there we go we've connected the movieService to components to share data across them.
+
+    
 
 
     
