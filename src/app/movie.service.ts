@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Http, URLSearchParams } from '@angular/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/debounceTime';
 
-import { Movie } from './movie'
+import { Movie } from './Movie'
 
 @Injectable()
 export class MovieService {
@@ -14,13 +12,16 @@ export class MovieService {
   private configurationUrl:string = "https://api.themoviedb.org/3/configuration"
   private apiKey:string = "0ae57aa38ff0e4c5116feb88b8f6ee81"
   private imageBaseUrl:string = ""
-  private selectedMovie = new Subject<Movie>()
+  private selectedMovie:Subject<Movie> = new Subject<Movie>()
   private imageSizes:{backdrop?:string[], poster?:string[]} = {}
   
-  constructor(private http:Http) { 
+  constructor(private http:HttpClient) { 
     this.setImageConfiguration()
   }
   
+  changeSelectedMovie(movie:Movie){
+    this.selectedMovie.next(movie)
+  }
   get currentMovie(){
     return this.selectedMovie
   }
@@ -30,17 +31,16 @@ export class MovieService {
   }
   
   searchMovie(query:string){
-    const search = this.paramsWithApiKey({query})
-    return this.http.get(`${this.baseApiUrl}`, { search })
-                    .map(res => res.json().results)
+    const params = this.paramsWithApiKey({query})
+    return this.http.get<any>(`${this.baseApiUrl}`, { params })
+                    .map(res => res.results)
   }
  
   setImageConfiguration(){
     
-    const search = this.paramsWithApiKey()
-
-    this.http.get(`${this.configurationUrl}`, { search })
-                    .map(res=>res.json())
+    const params = this.paramsWithApiKey()
+    this.http.get<any>(`${this.configurationUrl}`, { params })
+                    .map(res=>res)
                     .subscribe(config=>{
                       this.imageBaseUrl = config.images.base_url
                       this.imageSizes = {
@@ -66,16 +66,14 @@ export class MovieService {
   }
 
   paramsWithApiKey(otherParams:Object = {}){
-    const params:URLSearchParams = new URLSearchParams()
-    params.set('api_key', this.apiKey)
+    let params:HttpParams = new HttpParams().set('api_key', this.apiKey)
 
     const keys = Object.keys(otherParams)
     keys.forEach( k =>{
-      params.set(k, otherParams[k])
+      params = params.set(k, otherParams[k])
     })
     return params
   }
-  changeSelectedMovie(movie:Movie){
-    this.selectedMovie.next(movie)
-  }
+
+  
 }
