@@ -7,18 +7,11 @@ Then if we want to search something new we just click this little search button 
 Now, the first thing we have to do when creating our app in angular is plan how we would break down our app into components. 
 Let's go ahead and look at this one from Top to bottom
 
-<<<<<<< HEAD
 We got a little search button that could be it's own thing for like a header which could be a component by it self
 
 Then we have a search input that shows movies when typed in. So that all by it self can be a component. 
 Then we have these cards displaying the search results title and backgrounds could be a component.
 
-=======
-We got a little search button that we'll I would be something like a header for us
-
-Then we have a search input that shows movies when typed in. So that all by it self can be a component. 
-Then we have these cards displaying the search results, with a title, release date, and a background which we could be a component.
->>>>>>> 65942f2d447b64917ffaf85709b1082b236d8eb2
 
 Then when we click on one of the these cards the search and search-results go away 
 and the movie details show up. So this would be a completely seperate component from the search.
@@ -40,6 +33,7 @@ So you can follow with me almost to a T or create your own styles once the proje
         "animations.css",
         "styles.css"
 3. add font link in index.html,   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">  
+4. Now if we type npm start in the terminal we should see the start of our awesome angular application
 
 C.Creating the component structure
 So now we're going to create the structure of what we'd like to see using components.
@@ -57,13 +51,8 @@ So now we're going to create the structure of what we'd like to see using compon
     called HeaderComponent. and for right now were just going to put in some filler text.
 
 4.Now let's do the movie details we have here (show details component) with the poster
-<<<<<<< HEAD
-    image on the right side. Let's call that component display-movie and use the angular cli
-    to make the external template and the component file by typing in the terminal
-=======
     image on the side. Let's call this component the display-movie component and use the angular cli
     to make the external template and the component file by typing this command in the terminal in the directory of our application
->>>>>>> 65942f2d447b64917ffaf85709b1082b236d8eb2
     ng g c displayMovie --inline-style true --flat true --spec false --prefix false
     and then just put some filler text in there. "Movie Details"
 
@@ -73,13 +62,8 @@ So now we're going to create the structure of what we'd like to see using compon
     using the angular-cli again
     ng g c search --inline-style true --spec false --prefix false
     Let's go ahead and put the input in this one.
-<<<<<<< HEAD
 6.Then remeber there's a lot of cards that show up that are like the preview of the movie 
     let's call them movie-preview,
-=======
-6.Then remeber there's a lot of cards that show up that are the movie preview 
-    cards so let's call them just that,
->>>>>>> 65942f2d447b64917ffaf85709b1082b236d8eb2
     and use the anuglar cli to put them in the search foler by typing
     ng g c search/moviePreview --inline-style true --spec false --prefix false --flat true
 
