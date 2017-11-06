@@ -371,6 +371,31 @@ J.Setting Up Your Movie Db Account
     6.So copy that api key and for now we're just going to put it in our movie service as a variable.
         but in production you may want to make this a enviorment variable or put it in a seperate file.
     7.Now that we're all setup let's go ahead and connect to the database.
+K.Getting Search Results from the database
+    //movie.service.ts
+    1.So now that we've got our API key we can go ahead and start searching the database
+        for movies.
+    2.So here in our service we're going to first make a variable 
+        for the baseUrl for the API endpoint and call it 
+        private baseApiSearchUrl:string = "http://api.themoviedb.org/3/search/movie"
+    3.Then we're going to neep the Http property from HttpClient to do our request
+        so let's import that at the top, along with HttpParams because our requests
+        are going to have params sent with it.
+    import { HttpClient, HttpParams } from '@angular/common/http'
+    //app.module.ts
+    4. Then we'll need to import the HttpClientModule in the app.module.ts
+    import { HttpClientModule } from '@angular/common/http'
+    and put it in our imports array of our module
+    //movie.service.ts
+    5. Now back in the movie service we'll create a function called 
+    that takes one parameter, the query to search, and it's going to return an observable
+    from the http.get function 
+    6. We're going to also give it some parameters which will be the api_key, and the query.
+    searchMovie(query:string){
+        return this.http.get<any>(`${this.baseApiUrl}`, { params })
+                    .map(res => res.results)
+    }
+
 
 
 
