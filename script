@@ -360,6 +360,22 @@ I.Faking the search with observables
         so let's say 500
     .debounceTime(500)
     13. And now you'll see that it only happens after I stop typing for about a half second
+J.Setting Up Your Movie Db Account
+    //https://www.themoviedb.org
+    1.So to connect to the moviedb API you're going to need an API key.
+    2.The way you get that is by going to their main site. Signup.
+    Then once you've logged in click on this little bubble with your initial.
+    4.Click settings and then scroll down and click API
+    5.Here you should find two things an API key for v3 of their API and then an access token
+        for v4 of their api. We'll be using version 3 because it's much easier to setup.
+    6.So copy that api key and for now we're just going to put it in our movie service as a variable.
+        but in production you may want to make this a enviorment variable or put it in a seperate file.
+    7.Now that we're all setup let's go ahead and connect to the database.
 
+
+
+
+PROPERLY ATTRIBUTE
+https://www.themoviedb.org/about/logos-attribution
 
     
