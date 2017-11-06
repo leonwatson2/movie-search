@@ -10,6 +10,7 @@
     animation: 1.374s ease-out fade-in-left;
     animation-fill-mode: forwards;
 }
+
 .fade-in-right{
     opacity: 0;
     animation: .75s ease-in fade-in-right;
