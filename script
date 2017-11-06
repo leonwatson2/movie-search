@@ -4,61 +4,64 @@ We're creating an application that connects to the moviedb api that'll allow us 
 search the database choose a movie and and ahow some simple information like the release date and the synapses.
 Then if we want to search something new we just click this little search button up here and we're back to searching again.
 
-Now, the first thing we have to do when creating our app in React is plan how we would break down our app into components. 
-Let's go ahead and break this down into components.  Top to bottom
+Now, the first thing we have to do when creating our app in angular is plan how we would break down our app into components. 
+Let's go ahead and look at this one from Top to bottom
 
-We got a little search button that could be it's own thing for like a header but since it's just one thing 
-we'll keep it in the main app template.
+We got a little search button that we'll I would be something like a header for us
 
 Then we have a search input that shows movies when typed in. So that all by it self can be a component. 
-Then we have these cards displaying the search results title and backgrounds could be a component in itself inside of that
-and those could all in a component that holds the list.
+Then we have these cards displaying the search results, with a title, release date, and a background which we could be a component.
 
 Then when we click on one of the these cards the search and search-results go away 
 and the movie details show up. So this would be a completely seperate component from the search.
 
 Let's call that movie details.
 
-Last but not least we have simple footer which is always a good time to create a component. 
+Last but not least we have simple footer which is usually something you would want to make into a component. 
 
-So next up we're going to setup the project with the necessary styles and links then get to creating these components
+So next up we're going to setup the project with the necessary styles and links, and then get to creating these components
 
 B.Setup Project
 Files: style.css, animations.css 
 0. ng new movie-search
 1. npm install materialize-css --save
 2. add paths to styles in angular-cli.json
+Also go ahead and download the style.css and animation.css files from the course files.
+So you can follow with me almost to a T or create your own styles once the project is done.
+2.5.  "../node_modules/materialize-css/dist/css/materialize.min.css",
+        "animations.css",
+        "styles.css"
 3. add font link in index.html,   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">  
-4. add custom styles from the course files
 
 C.Creating the component structure
-So now we're going to create the structure of what we'd like to see using components it's time to create.
+So now we're going to create the structure of what we'd like to see using components.
 1. First I'd like you to take the challenge and create the structure of the app. 
     I don't mean creating exactly how it looks but just the components with some dummy text.
     So the search component just says search component or movie card says movie card so you can get use to 
     creating your components. Maybe nest components inside folders according to where the component will go in the app.
     Also, try to create them by hand and then also using the angular-cli.
-    This'll help you get a grasp on creating an angular application.
+    This'll help you get an even better grasp of creating your angular applications.
     So go ahead, pause, the video and create those components and then we'll do it together.
 2. So how do you think you did? Does the structure make since to you, if you came back to it a month 
     from now would you be able to jump back in and modify something?
-3.Awesome, so let's go ahead and do it together. First let's go ahead and make this top header with the search button
-    We'll go ahead and just make this a component with a inline-template
+3.Awesome, so let's go ahead and do it together. First let's make this top header with the search button
+    We'll just make this a component with a inline-template
     called HeaderComponent. and for right now were just going to put in some filler text.
 
 4.Now let's do the movie details we have here (show details component) with the poster
-    image on the side. Let's call that display-movie component and use the angular cli
-    to make the external template and the component file by typing in the terminal
+    image on the side. Let's call this component the display-movie component and use the angular cli
+    to make the external template and the component file by typing this command in the terminal in the directory of our application
     ng g c displayMovie --inline-style true --flat true --spec false --prefix false
     and then just put some filler text in there. "Movie Details"
 
 5.Then let's go ahead and create the search component. 
-    And since this one has other components. We'll go ahead and make a folder with this one.
+    And since will have other components inside of it.
+     We'll go ahead and make a folder with this one.
     using the angular-cli again
     ng g c search --inline-style true --spec false --prefix false
     Let's go ahead and put the input in this one.
 6.Then remeber there's a lot of cards that show up that are the movie preview 
-    cards let's call them just that,
+    cards so let's call them just that,
     and use the anuglar cli to put them in the search foler by typing
     ng g c search/movie-preview --inline-style true --spec false --prefix false --flat true
 
