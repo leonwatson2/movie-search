@@ -349,7 +349,7 @@ I.Faking the search with observables
     8.but first we're going to map through each value given to it, 
     set the fetching to true, and then send that value to the subscriber
     9.then this is where we would connect to the database but we're going do that in the 
-    movieService so for now let's just console.log out the value, in a function we create called 
+    movieService so for now let's just set the searchResults to the mock-data out the value, in a method we create called 
     searchQuery(query:string)
     10.Now if we test this you'll see that we are search on every key stroke but we don't want to 
     send request to the server every key stroke. So we're going to use a function built on top
