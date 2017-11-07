@@ -1,15 +1,27 @@
 # Table of Contents
 A. [What we'll be making](#a-what-well-be-making)
+
 B. [Setup the Project](#b-setup-project)
+
 C. [Creating the Component Structure](#c-creating-the-component-structure)
+
 D. [Creating the HTML/CSS for our components](#d-creating-the-htmlcss-for-our-components)
+
 E. [The Movie Interface](#e-the-movie-interface)
+
 F. [Setting Up the Input and Outputs](#f-setting-up-the-input-and-outputs)
+
 G. [The Movie Interface and Current Movie](#g-the-movie-service-and-the-current-movie)
+
 H. [Getting the CurrentMovie From the Service](#h-getting-the-currentmovie-from-the-service)
+
 I. [Faking the search with observables](#ifaking-the-search-with-observables)
+
 J. [Setting Up Your Movie Db Account](#j-setting-up-your-movie-db-account)
+
 K. [Getting Search Results from the Database](#k-getting-search-results-from-the-database)
+
+
 
 ## A. What we'll be making
 1. Before we can get to creating our app let's look at what we're creating.
