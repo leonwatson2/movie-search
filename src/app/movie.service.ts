@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 
 import { Movie } from './Movie'
 
@@ -10,7 +11,7 @@ import { Movie } from './Movie'
 export class MovieService {
   private baseApiUrl:string = "http://api.themoviedb.org/3/search/movie"
   private configurationUrl:string = "https://api.themoviedb.org/3/configuration"
-  private apiKey:string = "0ae57aa38ff0e4c5116feb88b8f6ee81"
+  private apiKey:string = "0ae57aa38ff0e4c5116feb88b8f6ee8"
   private imageBaseUrl:string = ""
   private selectedMovie:Subject<Movie> = new Subject<Movie>()
   private imageSizes:{backdrop?:string[], poster?:string[]} = {}
@@ -26,16 +27,23 @@ export class MovieService {
     return this.selectedMovie
   }
 
-  apiQuery(query:string){
-    return `?api_key=${this.apiKey}&query=${query}`
-  }
   
   searchMovie(query:string){
-    const params = this.paramsWithApiKey({query})
+    const params = new HttpParams().set('api_key', this.apiKey).set('query', query)
     return this.http.get<any>(`${this.baseApiUrl}`, { params })
                     .map(res => res.results)
   }
  
+  paramsWithApiKey(otherParams:Object = {}){
+    let params:HttpParams = new HttpParams().set('api_key', this.apiKey)
+
+    const keys = Object.keys(otherParams)
+    keys.forEach( k =>{
+      params = params.set(k, otherParams[k])
+    })
+    return params
+  }
+
   setImageConfiguration(){
     
     const params = this.paramsWithApiKey()
@@ -65,15 +73,6 @@ export class MovieService {
 
   }
 
-  paramsWithApiKey(otherParams:Object = {}){
-    let params:HttpParams = new HttpParams().set('api_key', this.apiKey)
-
-    const keys = Object.keys(otherParams)
-    keys.forEach( k =>{
-      params = params.set(k, otherParams[k])
-    })
-    return params
-  }
 
   
 }
