@@ -173,25 +173,30 @@ just adding the necessary elements and classes to make it look more like the fin
 
 
 ## E. The Movie Interface
-    So we're going to be working with the movie DB database. You can find the API here at
-    https://developers.themoviedb.org/3/
-    and we're going to go down here to see how we can search for movies using this API.
-    So you'll see that we need to have an API key and query params for when we call this api.
-    But what we're looking for is the object that is passed from it. Which is here under responses.
-    And we're going to only use some of this information like the 
-    export interface Movie {
-        backdrop_path?:string|null
-        poster_path?:string|null
-        genres?:Object[]
-        original_title?:string
-        overview?:string
-        title?:string
-        tagline?:string|null
-        release_date?:string
-    }
-    So we're going to go ahead and make an interface that has all these properties called Movie.
-    This is going to tell Angular and Typescript what type of object we expect for our variables.
-    So now we can use that every where we need it in the application for clarification.
+1. So we're going to be working with the movie DB database. You can find the API here at
+and we're going to go down here to see how we can search for movies using this API.
+So you'll see that we need to have an API key and query params for when we call this api.
+But what we're looking for is the object that is passed from it. Which is here under responses.
+And we're going to only use some of this information like the 
+```
+https://developers.themoviedb.org/3/
+```
+
+```
+export interface Movie {
+    backdrop_path?:string|null
+    poster_path?:string|null
+    genres?:Object[]
+    original_title?:string
+    overview?:string
+    title?:string
+    tagline?:string|null
+    release_date?:string
+}
+```
+So we're going to go ahead and make an interface that has all these properties called Movie.
+This is going to tell Angular and Typescript what type of object we expect for our variables.
+So now we can use that every where we need it in the application for clarification.
 
 
 ## F. Setting Up the Input and Outputs
@@ -206,19 +211,19 @@ the baseURL of where to get the posters and background you saw in the applicatio
 and the different sizes of the pictures.
 
 2. Now let's use that mock data to start putting together our functionality
-//search.component.ts
+#### //search.component.ts
 3. Let's start in the search.component.ts 
 where we'll import that the searchResults as data at the top.
 4. Then we'll create a variable called searchResults in our SearchComponent 
 class that'll be an Array of Movies and we'll import that interface so Typescript 
 knows what that type is.
 5. We'll initialize that to the data we're getting from the mock-data
-//search.component.html
+#### //search.component.html
 6. Now we're going to go to the template file for the search component
 and we're going to *ngFor="let movies of searchResults; let i = index;"
 directive and loop through our searchResults on the movie-preview component
 7. And pass each search result in as a property called movie that we'll create next
-//movie-preview.component.ts
+#### //movie-preview.component.ts
 8. So now go to the movie-preview component ts file
 9. and we're going to import Input from angular core so we can put an input on out 
 movie-preview component
@@ -229,11 +234,11 @@ movie-preview component
 13. print out the movie.title and the movie.release_date 
 14. Last Input that we'll need to do is in the app component so 
 let's open the app.component.ts.
-//app.component.ts
+#### //app.component.ts
 15. We're going to import that Movie interface we made 
 then create a variable inside the component called currentMovie with the type
 Movie and initialize it to be null
-//app.component.html
+#### //app.component.html
 16. Then we'll go to the template file and send that currentMovie variable to the 
 display-movie component as a property called movie
 16.5. and we're going to have an event for when a movie-preview
@@ -255,12 +260,14 @@ for the:
 URL and we'll get the base url from it using a complete different request
 //display-movie.component.ts
 21. for right now we'll return the poster from the Avengers movie
-```http://cdn.collider.com/wp-content/uploads/the-avengers-robert-downey-jr-iron-man-poster.jpg```
+```
+http://cdn.collider.com/wp-content/uploads/the-avengers-robert-downey-jr-iron-man-poster.jpg
+```
 
 22. So there we go, we setup the inputs and outputs for our application!
 
 ## G. The Movie Service and the Current Movie
-1.At the moment we have the current movie variable but it's just an empty object 
+1. At the moment we have the current movie variable but it's just an empty object 
 and doesn't change when we click on the movie-preview cards. Now we could setup 
 an event chain from the search component to the app component to get the selected movie
 but instead we're going to use a service to hold that data instead of making the app.component
@@ -270,32 +277,37 @@ reliant on that event to get the currentMovie.
 ng g service movieService --spec false --module app.module.ts
 This will create a service called MovieService and provide it in our app.module so
 we can inject it anywhere in our application
-//movie.service.ts
+#### //movie.service.ts
 3. We're going to import Observable and Observer from 
+```
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-because we are going to create an Obeservable for the currentMovie 
+```
+because we are going to create an Observable for the `currentMovie`
 that is the selected in the application and going to need an Subject to 
 allows us to call the next function on our Observable. 
 This would be a good time to use a library like flux or redux but since this application
 is so small having it done in a service would be the quickest and easiest way using what
 we've learned so far.
 and let's also import that Movie interface we made. 
-4.So now we'll give the service a private variable called 
+4. So now we'll give the service a private variable called 
+```
 private selectedMovie:Subject<Movie> = new Subject<Movie>()
-
-5.then well also make a get variable call currentMovie that'll return 
+```
+5. then well also make a get variable call currentMovie that'll return 
 our selectedMovie variable so we can access to that Observable to subscribe to.
-
+```
 get currentMovie(){
     return this.selectedMovie
 }
-6.last thing we need to do is create a function that will call that next function on our observer
+```
+6. last thing we need to do is create a function that will call that next function on our observer
 when the currentMovie is changed.
-
+```
 changeSelectedMovie(movie:Movie){
-this.movieObserver.next(movie)
+    this.movieObserver.next(movie)
 }
+```
 
 Great so now we can go ahead and use this to set the currentMovie and get the current movie 
 in other components
@@ -304,109 +316,128 @@ We've created the movie service and provided it to our application.
 So now all we need to do is inject it into the components that need it and use 
 the properties and functions.
 
-//app.component.ts
+#### //app.component.ts
 1. In here we'll first import the movie service
 2. Then we'll inject it inside our component
 3. Then also in the constructor we'll subscribe to the currentMovie observable
+```
 constructor(private movieService:MovieService){
-movieService
-.currentMovie
-.subscribe(movie => {
-    this.currentMovie = movie
-})
+    movieService
+    .currentMovie
+    .subscribe(movie => {
+        this.currentMovie = movie
+    })
 }
+```
 so now whenever that next function is called on the subject in the service the 
 movie will be passed to this function and set our currentMovie variable.
 
-//app.component.html
-4.Now in our app.component.html file we'll go ahead and use the *ngif attribute directive 
+#### //app.component.html
+4. Now in our app.component.html file we'll go ahead and use the *ngif attribute directive 
 to only show the display-movie component when there is a movie and the search component 
 when there isn't 
 
-//search.component.ts
-5.This is where we have a click function that changes the current movie so
+#### //search.component.ts
+5. This is where we have a click function that changes the current movie so
 we're going go ahead and connect it to the movie service by changing the console.log()
 in the setCurrentMovie function to use the movieService function we created
-
+```
 setCurrentMovie(movie:Movie){
-this.movieService.changeSelectedMovie(movie)
+    this.movieService
+        .changeSelectedMovie(movie)
 }
-
-6.So let's import the movie service
-7.and inject into our component in the constructor
+```
+6. So let's import the movie service
+7. and inject into our component in the constructor
 8. now in the setCurrentMovie function let's get rid of the console.log and 
 use the movie to set the currentMovie 
 9. And there we go we've connected the movieService to components to share data across them.
 ## I.Faking the search with observables
-//search.component.ts
+#### //search.component.ts
+
 1. So now we need to setup up the searching is our search.component.ts file
 2. What we want is to send a search query after the user types into the input.
 3. This can be done using that subject Obeservable like we did in the movie.service 
 to send searches after an input change.
 4. First we'll need to import Subject
+```
 import { Subject } from 'rxjs/Subject';
+```
 5. Then down in the SearchComponent class we'll create a variable
+```
 private search$:Subject<string> = new Subject<string>()
+```
 and if remeber that all the dollar sign means at the end of the variable name is that
 is a type of observable.
 
-6.We're also going to make a boolean variable called fetching that will use to hold the 
+6. We're also going to make a boolean variable called `fetching` that will use to hold the 
 state of fetching searchResults or not.
+```
 fetching:boolean = false
+```
+7. Now in this ngOnInit method which is a method that is called when the component is about to be put on the page. We're going to go ahead and subscribe to that search observable.
+```
+this.search$.map((query)=> {
+    this.fetching = true; return query
+    })
+    .subscribe(this.searchQuery.bind(this))
+```
 
-7.Now in this ngOnInit method which is a method that is called when the component is 
-about to be put on the page.
-We're going to go ahead and subscribe to that search observable.
-
-this.search$.map((query)=> {this.fetching = true; return query})
-          .subscribe(this.searchQuery.bind(this))
-8.but first we're going to map through each value given to it, 
+8. but first we're going to map through each value given to it, 
 set the fetching to true, and then send that value to the subscriber
-9.then this is where we would connect to the database but we're going do that in the 
+9. then this is where we would connect to the database but we're going do that in the 
 movieService so for now let's just set the searchResults to the mock-data out the value, in a method we create called 
 searchQuery(query:string)
-10.Now if we test this you'll see that we are search on every key stroke but we don't want to 
+10. Now if we test this you'll see that we are search on every key stroke but we don't want to 
 send request to the server every key stroke. So we're going to use a function built on top
 of observables that allows us to debounce or wait until things stop changing before sending
 and that method is called debounceTime.
 11. All we need to do is import it at the top from rxjs
+```
 import 'rxjs/add/operator/debounceTime'; 
+```
+
 12. And then add it before our call to subscribe and give it a value we want to debounce by
 so let's say 500
 ```.debounceTime(500)```
 13. And now you'll see that it only happens after I stop typing for about a half second
+
+
 ## J. Setting Up Your Movie Db Account
-//https://www.themoviedb.org
-1.So to connect to the moviedb API you're going to need an API key.
-2.The way you get that is by going to their main site. Signup.
+* https://www.themoviedb.org
+1. So to connect to the moviedb API you're going to need an API key.
+2. The way you get that is by going to their main site. Signup.
 Then once you've logged in click on this little bubble with your initial.
-4.Click settings and then scroll down and click API
-5.Here you should find two things an API key for v3 of their API and then an access token
+4. Click settings and then scroll down and click API
+5. Here you should find two things an API key for v3 of their API and then an access token
 for v4 of their api. We'll be using version 3 because it's much easier to setup.
-6.So copy that api key and for now we're just going to put it in our movie service as a variable.
+6. So copy that api key and for now we're just going to put it in our movie service as a variable.
 but in production you may want to make this a enviorment variable or put it in a seperate file.
-7.Now that we're all setup let's go ahead and connect to the database.
-## K. Getting Search Results from the database
-//movie.service.ts
-1.So now that we've got our API key we can go ahead and start searching the database
+7. Now that we're all setup let's go ahead and connect to the database.
+
+## K. Getting Search Results from the Database
+#### //movie.service.ts
+1. So now that we've got our API key we can go ahead and start searching the database
 for movies.
-2.So here in our service we're going to first make a variable 
-for the baseUrl for the API endpoint and call it 
+2. So here in our service we're going to first make a variable for the api endpoint for searching called baseApiSearchUrl 
+```
 private baseApiSearchUrl:string = "http://api.themoviedb.org/3/search/movie"
-3.Then we're going to neep the Http property from HttpClient to do our request
-so let's import that at the top, along with HttpParams because our requests
-are going to have params sent with it.
+```
+3. Then we're going to neep the HttpClient class to do our request so let's import that at the top, along with HttpParams class so we can add params to our requests.
+```
 import { HttpClient, HttpParams } from '@angular/common/http'
-//app.module.ts
+```
+#### //app.module.ts
 4. Then we'll need to import the HttpClientModule in the app.module.ts
+```
 import { HttpClientModule } from '@angular/common/http'
+```
 and put it in our imports array of our module
-//movie.service.ts
-5. Now back in the movie service we'll create a function called 
-that takes one parameter, the query to search, and it's going to return an observable
-from the http.get function pass in the the baseApiUrl, and then pass in the parameters.
+#### //movie.service.ts
+5. Now back in the movie service we'll create a function called `searchMovie` that takes *one parameter*, the query to search, and it's going to return the observable that the http.get function returns.
+We'll then pass in the the baseApiUrl as the first parameter, and then pass in the url params.
 8. Which we haven't created yet. So we create a variable called params and use the HttpParams class to create our params.
-7. The params are going to be the api_key, and the query.
+7. The params are going to be the `api_key`, and the `query`.
 ```
 searchMovie(query:string){
     const params = new HttpParams().set('api_key', this.apiKey).set('query', query)
@@ -414,19 +445,30 @@ searchMovie(query:string){
             .map(res => res.results)
 }
 ```
-8.So now that we've got that setup. You'll remember that I said returns an Observable, which means  
+8. So now that we've got that setup. You'll remember that I said returns an Observable, which means  
 we can subscribe to this method in our search component.
-//search.component.ts
-9.Alright so now in our searchQuery method we're going to change this console.logo
-to use the movieSercive searchMovie method but first we want to make sure we don't send an empty
-query by checking if the query length is greater than zero if it is we just set fetching to false
-and the searchResults array to [] an empty array.
-10.Now If it is a valid query we'll call that searchMovie(query) method with the query then subscribe to 
+#### //search.component.ts
+9. So in our searchQuery method we're going to change this console.log to use the `movieService.searchMovie` method but first we want to make sure we don't send an empty query by checking if the query length is greater than zero, if it is we just set fetching to false and the searchResults array to [] an empty array.
+10. Now If it is a valid query we'll call that `searchMovie(query)` method with the query parameters then subscribe to 
 it to get the searchResults back.
-Then after we get the results and set the searchResults array to that and set fetching to false
-11.So now if we go back to our application we'll see if we type in a query we'll get those results!
-
-## L.Getting the photos in The MovieDB 
+12. Then after we get the results and set the searchResults array to that and set fetching to false
+11. So now if we go back to our application we'll see if we type in a query we'll get those results!
+```
+ handleChange(query:string){
+    if(val.length === 0){
+        this.searchResults = []
+        this.fetching = false      
+        }else{
+        this.movieService.searchMovie(val)
+                        .subscribe((searchResults:Movie[]) => { 
+                            this.fetching = false
+                            if(searchResults)
+                            this.searchResults = searchResults
+                        }, (err)=>{ console.log(err) }, ()=>{ console.log('completed') })
+        }
+ }
+```
+## L. Getting the photos in The MovieDB 
 1.The next thing we need to do is set our backgrounds to the 
 
 
