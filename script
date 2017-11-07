@@ -345,11 +345,12 @@ I.Faking the search with observables
     We're going to go ahead and subscribe to that search observable.
     
     this.search$.map((query)=> {this.fetching = true; return query})
-                  .subscribe(this.handleChange.bind(this))
+                  .subscribe(this.searchQuery.bind(this))
     8.but first we're going to map through each value given to it, 
     set the fetching to true, and then send that value to the subscriber
     9.then this is where we would connect to the database but we're going do that in the 
-    movieService so for now let's just console.log out the value.
+    movieService so for now let's just console.log out the value, in a function we create called 
+    searchQuery(query:string)
     10.Now if we test this you'll see that we are search on every key stroke but we don't want to 
     send request to the server every key stroke. So we're going to use a function built on top
     of observables that allows us to debounce or wait until things stop changing before sending
@@ -389,15 +390,28 @@ K.Getting Search Results from the database
     //movie.service.ts
     5. Now back in the movie service we'll create a function called 
     that takes one parameter, the query to search, and it's going to return an observable
-    from the http.get function 
-    6. We're going to also give it some parameters which will be the api_key, and the query.
+    from the http.get function pass in the the baseApiUrl, and then pass in the parameters.
+    8. Which we haven't created yet. So we create a variable called params and use the HttpParams class to create our params.
+    7. The params are going to be the api_key, and the query.
     searchMovie(query:string){
+            const params = new HttpParams().set('api_key', this.apiKey).set('query', query)
         return this.http.get<any>(`${this.baseApiUrl}`, { params })
                     .map(res => res.results)
     }
-
-
-
+    8.So now that we've got that setup. You'll remember that I said returns an Observable, which means  
+        we can subscribe to this method in our search component.
+    //search.component.ts
+    9.Alright so now in our searchQuery method we're going to change this console.logo
+        to use the movieSercive searchMovie method but first we want to make sure we don't send an empty
+        query by checking if the query length is greater than zero if it is we just set fetching to false
+        and the searchResults array to [] an empty array.
+    10.Now If it is a valid query we'll call that searchMovie(query) method with the query then subscribe to 
+        it to get the searchResults back.
+        Then after we get the results and set the searchResults array to that and set fetching to false
+    11.So now if we go back to our application we'll see if we type in a query we'll get those results!
+    
+    L.Getting the photos in The MovieDB 
+        1.The next thing we need to do is set our backgrounds to the 
 
 
 PROPERLY ATTRIBUTE
