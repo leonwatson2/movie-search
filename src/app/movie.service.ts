@@ -3,7 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
 
 import { Movie } from './Movie'
 
@@ -11,7 +10,7 @@ import { Movie } from './Movie'
 export class MovieService {
   private baseApiUrl:string = "http://api.themoviedb.org/3/search/movie"
   private configurationUrl:string = "https://api.themoviedb.org/3/configuration"
-  private apiKey:string = "0ae57aa38ff0e4c5116feb88b8f6ee8"
+  private apiKey:string = "0ae57aa38ff0e4c5116feb88b8f6ee81"
   private imageBaseUrl:string = ""
   private selectedMovie:Subject<Movie> = new Subject<Movie>()
   private imageSizes:{backdrop?:string[], poster?:string[]} = {}
