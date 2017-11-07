@@ -34,7 +34,7 @@ export class SearchComponent implements OnInit {
                         this.fetching = false
                         if(searchResults)
                           this.searchResults = searchResults
-                      })
+                      }, (err)=>{ console.log(err) }, ()=>{ console.log('completed') })
     }
   }
 
