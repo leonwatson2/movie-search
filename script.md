@@ -5,7 +5,7 @@ B. [Setup the Project](#b-setup-project)
 
 C. [Creating the Component Structure](#c-creating-the-component-structure)
 
-D. [Creating the HTML/CSS for our components](#d-creating-the-htmlcss-for-our-components)
+D. [Creating the HTML/CSS for Our Components](#d-creating-the-htmlcss-for-our-components)
 
 E. [The Movie Interface](#e-the-movie-interface)
 
@@ -493,8 +493,103 @@ it to get the searchResults back.
         }
  }
 ```
-## L. Getting the photos in The MovieDB 
-1.The next thing we need to do is set our backgrounds to the 
+## L. Getting the Photo Paths from The MovieDB 
+1. The next thing we need to do is set our backgrounds to the movie-preview cards
+2. and set the poster for the movie that is being displayed in our movie-preview component
+3. To do this the MovieDb requires us to get the base url and the available sizes of the photos from a different api request. called configuration.
+#### //movie.service.ts
+4. So in our movie service we're going to create a variable that holds that base url called `baseConfigurationUrl`
+```
+private baseConfigurationUrl:string = "https://api.themoviedb.org/3/configuration"
+```
+5. We'll also create a variable to hold the imagesSizes and the image base urls
+```
+private imageBaseUrl:string = ""
+private imageSizes:{backdrop?:string[], poster?:string[]} = {}
+```
+6. There are two types of images we get from the api and that's 
+    - the backdrop, which will be on our movie-preview cards
+    - and the poster which will be the big image on the right in our display-movie component
+7. Now we'll create a function to handle this request for us called getImageConfiguration
+```
+setImageConfiguration(){}
+```
+8. We'll create some params with the API key
+```
+const params = new HttpParams().set('api_key', this.apiKey)
+```
+9. Call the http get method with the configurationUrl and the url params
+```
+this.http.get<any>(this.baseConfigurationUrl}, { params })
+```
+10. map over the value returned and return it
+```
+.map(res=>res)
+```
+11. then subscribe to it and get the neccessary values from the response
+```
+.subscribe(config => { 
+    this.imageBaseUrl = config.images.base_url
+    this.imageSizes = {
+        backdrop:config.images.backdrop_sizes,
+        poster:config.images.poster_sizes
+    }
+    console.log(this.imageBaseUrl)
+    console.log(this.imageSizes)
+})
+```
+12. Then we'll call that in the construtor of our service.
+
+13. Once we have those values we can go ahead and create functions to create the url. 
+```
+createPhotoUrl(path:string, isBackDrop:boolean){
+    if(!path){
+      return ""
+    }
+    imageSize = isBackDrop ? this.imageSizes.backdrop[0] : this.imageSizes.poster[this.imageSizes.poster.length - 1]
+    return `${this.imageBaseUrl}${imageSize}${path}`
+
+}
+```
+
+14. Now that we have that function in place in our service we can map through our results in our search function and add the absolute url to each one before giving it to our component.
+```
+.map(res => res.results.map((result:Movie) => { 
+    return { 
+        ...result,  
+        backdropUrl: this.createPhotoUrl(result.backdrop_path)
+        posterUrl: this.createPhotoUrl(result.poster_path) 
+    } ))
+```
+
+15. So all this does is return that same result with the backdropUrl and posterUrl properties added on to it for all our results. 
+#### //display-movie.component.ts
+16. So now in our display-movie.ts file we wont need this getBackdrop Url anymore
+#### //display-movie.component.html
+17. and in our display-movie.c.html file we can change this src attribute to use the `movie.posterUrl`
+
+#### //movie-preview.component.ts
+18. Then in our movie-preview.c.ts we can make a method to that returns a style for the background of our movie preview cards called `backdropStyle()` that returns the background with a linear graident and a url. as well as a background size of cover
+```
+backdropStyles = ()=> {
+    return {
+      'background':`linear-gradient(180deg, rgba(0,0,0,0.7), transparent),url(${this.backdropUrl})`,
+      'background-size': 'cover'
+    }
+}
+```
+#### //movie-preview.component.html
+19. then we can add an ngStyle that gets it's value from that function
+```html
+<div class="card blue-grey darken-1"  [ngStyle]="backdropStyles()">
+```
+20. One more thing we want to do in here is create that animation delay style on top div so we can get that staggered fade-in effect from all the cards
+```html
+<div class="col s12 m4" [ngClass]="['movie']" [ngStyle]="animationDelay()">
+```
+21. And there we go. We've created the movie db search application using the Angular Framework
+
+
 
 
 PROPERLY ATTRIBUTE
