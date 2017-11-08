@@ -30,7 +30,15 @@ export class MovieService {
   searchMovie(query:string){
     const params = new HttpParams().set('api_key', this.apiKey).set('query', query)
     return this.http.get<any>(`${this.baseApiUrl}`, { params })
-                    .map(res => res.results)
+                    .map(res => 
+                          res.results.map((result:Movie) =>{
+                            return {
+                              ...result, 
+                              backdropUrl:this.createBackdropUrl(result.backdrop_path),
+                              posterUrl:this.createPosterUrl(result.poster_path)
+                            }
+                          })
+                    )
   }
  
   paramsWithApiKey(otherParams:Object = {}){

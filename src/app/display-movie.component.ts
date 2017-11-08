@@ -15,7 +15,7 @@ import { MovieService } from './movie.service'
     </div>
   </div>
   <div class="col m5">
-    <img class="movie-poster fade-in-left" [src]="movieService.createPosterUrl(movie.poster_path)" alt="">
+    <img class="movie-poster fade-in-left" [src]="movie.posterUrl" alt="">
   </div> 
   `,
   styles: []

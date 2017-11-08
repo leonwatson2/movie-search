@@ -7,5 +7,7 @@ export interface Movie {
     overview?:string
     title?:string
     tagline?:string|null
-    release_date?:string
+    release_date?:string,
+    backdropUrl?:string,
+    posterUrl?:string,
 }
