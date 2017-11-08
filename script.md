@@ -11,7 +11,7 @@ E. [The Movie Interface](#e-the-movie-interface)
 
 F. [Setting Up the Input and Outputs](#f-setting-up-the-input-and-outputs)
 
-G. [The Movie Interface and Current Movie](#g-the-movie-service-and-the-current-movie)
+G. [The Movie Service and Current Movie](#g-the-movie-service-and-the-current-movie)
 
 H. [Getting the CurrentMovie From the Service](#h-getting-the-currentmovie-from-the-service)
 
